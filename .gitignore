@@ -173,5 +173,9 @@ target
 .idea
 /.idea
 ..idea
+.gitattributes
+..gitattributes
+build.xml
+.build.xml
  
 # End of https://www.gitignore.io/api/osx,java,eclipse,intellij,maven
