@@ -5,8 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.util.BoundingBox;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -60,7 +60,8 @@ public class Charger implements ConfigurationSerializable {
     }
     
     @Override
-    public @NotNull Map<String, Object> serialize() {
+    public @Nonnull
+    Map<String, Object> serialize() {
         Map<String, Object> map = new HashMap<>();
         
         map.put("base", baseLocation);

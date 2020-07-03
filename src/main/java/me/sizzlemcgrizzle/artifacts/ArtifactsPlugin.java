@@ -36,7 +36,7 @@ public class ArtifactsPlugin extends JavaPlugin {
     
     public static ArtifactsPlugin instance;
     public static String ADMIN_PERMISSION = "artifacts.admin";
-    public static String DEFAULT_PERMISSION = "artifacst.default";
+    public static String DEFAULT_PERMISSION = "artifacts.default";
     public static String MESSAGE_LINE;
     
     private static File ARTIFACTS_FILE;

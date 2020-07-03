@@ -3,12 +3,12 @@ package me.sizzlemcgrizzle.artifacts.charger;
 import me.sizzlemcgrizzle.artifacts.ArtifactsPlugin;
 import me.sizzlemcgrizzle.artifacts.settings.Settings;
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ConfirmationPrompt extends ChargerPrompt {
     
@@ -19,14 +19,15 @@ public class ConfirmationPrompt extends ChargerPrompt {
     private String[] no = new String[]{"no", "0", "false", "n", "wrong", "invalid"};
     
     public ConfirmationPrompt(Charger charger, Player player) {
-        super(ChatColor.YELLOW + "Do you want to remove this charger? You cannot undo this action!");
+        super();
         
         this.charger = charger;
         this.player = player;
     }
     
     @Override
-    protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext conversationContext, @NotNull String input) {
+    protected @Nullable
+    Prompt acceptValidatedInput(@Nonnull ConversationContext conversationContext, @Nonnull String input) {
         if (ArrayUtils.contains(yes, input.toLowerCase())) {
             
             ArtifactsPlugin.tell(player, Settings.PREFIX + "&eCharger has been removed.");

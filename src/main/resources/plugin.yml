@@ -4,6 +4,13 @@ api-version: 1.14
 author: sizzlemcgrizzle
 version: ${project.version}
 depend: [WorldGuard, Blueprints, WorldGuardEvents]
+permissions:
+  artifacts.admin:
+    description: admin permission
+    default: op
+  artifacts.default:
+    description: default permission
+    default: true
 commands:
   artifacts:
     description: Main plugin command group

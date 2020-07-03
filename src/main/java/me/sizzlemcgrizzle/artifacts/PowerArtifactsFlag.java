@@ -2,13 +2,10 @@ package me.sizzlemcgrizzle.artifacts;
 
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import de.craftlancer.clcapture.CLCapture;
 import de.craftlancer.clcapture.CapturePoint;
 import de.craftlancer.clcapture.CapturePointType;
 import me.sizzlemcgrizzle.artifacts.artifacts.Artifact;
-import net.raidstone.wgevents.events.RegionEnteredEvent;
-import net.raidstone.wgevents.events.RegionLeftEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,83 +26,6 @@ public class PowerArtifactsFlag implements Listener {
     
     static void registerFlag() {
         WorldGuard.getInstance().getFlagRegistry().register(POWER_ARTIFACTS_FLAG);
-    }
-    
-    @EventHandler
-    public void onRegionEnter(RegionEnteredEvent event) {
-        Player player = event.getPlayer();
-        
-        if (player == null)
-            return;
-        
-        ProtectedRegion region = event.getRegion();
-        
-        StateFlag.State state = region.getFlag(POWER_ARTIFACTS_FLAG);
-        
-        if (state != StateFlag.State.ALLOW)
-            return;
-        
-        if (!isPoweredPointActive())
-            return;
-        
-        int slot = 0;
-        for (ItemStack i : player.getInventory().getContents()) {
-            if (i == null
-                    || i.getType() == Material.AIR
-                    || i.getItemMeta() == null
-                    || !i.getItemMeta().hasCustomModelData()
-                    || ArtifactsPlugin.instance.getArtifacts().stream().noneMatch(a -> a.getType() == i.getType())) {
-                slot++;
-                continue;
-            }
-            Optional<Artifact> optional = ArtifactsPlugin.instance.getArtifacts().stream().filter(artifact -> artifact.getNormalDataNumber() == i.getItemMeta().getCustomModelData()).findFirst();
-            
-            if (!optional.isPresent()) {
-                slot++;
-                continue;
-            }
-            
-            ItemMeta meta = i.getItemMeta();
-            meta.setCustomModelData(optional.get().getPoweredDataNumber());
-            i.setItemMeta(meta);
-            
-            player.getInventory().setItem(slot, i);
-            slot++;
-        }
-        
-    }
-    
-    @EventHandler
-    public void onRegionLeave(RegionLeftEvent event) {
-        Player player = event.getPlayer();
-        
-        if (player == null)
-            return;
-        
-        int slot = 0;
-        for (ItemStack i : player.getInventory().getContents()) {
-            if (i == null
-                    || i.getType() == Material.AIR
-                    || i.getItemMeta() == null
-                    || !i.getItemMeta().hasCustomModelData()
-                    || ArtifactsPlugin.instance.getArtifacts().stream().noneMatch(a -> a.getType() == i.getType())) {
-                slot++;
-                continue;
-            }
-            Optional<Artifact> optional = ArtifactsPlugin.instance.getArtifacts().stream().filter(artifact -> artifact.getPoweredDataNumber() == i.getItemMeta().getCustomModelData()).findFirst();
-            
-            if (!optional.isPresent()) {
-                slot++;
-                continue;
-            }
-            
-            ItemMeta meta = i.getItemMeta();
-            meta.setCustomModelData(optional.get().getNormalDataNumber());
-            i.setItemMeta(meta);
-            
-            player.getInventory().setItem(slot, i);
-            slot++;
-        }
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
@@ -145,7 +65,7 @@ public class PowerArtifactsFlag implements Listener {
                 modelData = artifact.getNormalDataNumber();
             else
                 return;
-        } else if (!ArtifactsPlugin.instance.isPoweredArtifactRegion(player.getLocation()))
+        } else if (!ArtifactsPlugin.instance.isPoweredArtifactRegion(player.getLocation()) && mainHandModelData == artifact.getPoweredDataNumber())
             modelData = artifact.getNormalDataNumber();
         else
             return;
