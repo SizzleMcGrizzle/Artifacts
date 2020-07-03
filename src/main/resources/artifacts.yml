@@ -1,0 +1,12 @@
+windblade:
+  type: DIAMOND_SWORD
+  normalDataNumber: 1
+  poweredDataNumber: 2
+reapersscythe:
+  type: DIAMOND_SWORD
+  normalDataNumber: 3
+  poweredDataNumber: 6
+magneticmaul:
+  type: DIAMOND_SWORD
+  normalDataNumber: 4
+  poweredDataNumber: 5

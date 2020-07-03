@@ -1,0 +1,11 @@
+name: Artifacts
+main: me.sizzlemcgrizzle.artifacts.ArtifactsPlugin
+api-version: 1.14
+author: sizzlemcgrizzle
+version: ${project.version}
+depend: [WorldGuard, Blueprints, WorldGuardEvents]
+commands:
+  artifacts:
+    description: Main plugin command group
+  setmodeldata:
+    description: Changes the custom model data of held item
