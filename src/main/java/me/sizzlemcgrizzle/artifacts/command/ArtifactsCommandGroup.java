@@ -5,10 +5,10 @@ import org.bukkit.plugin.Plugin;
 
 public class ArtifactsCommandGroup extends CommandHandler {
     
-    public ArtifactsCommandGroup(Plugin plugin) {
+    public ArtifactsCommandGroup(Plugin plugin, String commandName) {
         super(plugin);
         
         registerSubCommand("changeModelData", new ArtifactsChangeModelDataCommand(plugin));
-        registerSubCommand("help", new ArtifactsHelpCommand(plugin, getCommands()));
+        registerSubCommand("help", new ArtifactsHelpCommand(plugin, getCommands(), commandName));
     }
 }

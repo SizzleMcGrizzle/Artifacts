@@ -31,7 +31,7 @@ public class PowerArtifactsFlag implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onArtifactUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ItemStack mainHand = event.getItem();
+        ItemStack mainHand = player.getInventory().getItemInMainHand();
         
         if (mainHand == null || mainHand.getType() == Material.AIR || !mainHand.hasItemMeta() || !mainHand.getItemMeta().hasCustomModelData())
             return;
@@ -81,10 +81,8 @@ public class PowerArtifactsFlag implements Listener {
         if (clCapture == null)
             return false;
         
-        if (clCapture.getPoints().stream().noneMatch(point -> point.getState() == CapturePoint.CapturePointState.ACTIVE
-                || point.getState() == CapturePoint.CapturePointState.CAPTURED))
-            return false;
-        
-        return clCapture.getPoints().stream().anyMatch(point -> point.getType().getArtifactModifer() == CapturePointType.ArtifactModifer.POWERED);
+        return clCapture.getPoints().stream().anyMatch(point -> (point.getState() == CapturePoint.CapturePointState.ACTIVE
+                || point.getState() == CapturePoint.CapturePointState.CAPTURED)
+                && point.getArtifactModifier() == CapturePointType.ArtifactModifer.POWERED);
     }
 }

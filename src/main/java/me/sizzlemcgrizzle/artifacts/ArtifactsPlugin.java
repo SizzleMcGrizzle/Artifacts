@@ -37,7 +37,6 @@ public class ArtifactsPlugin extends JavaPlugin {
     public static ArtifactsPlugin instance;
     public static String ADMIN_PERMISSION = "artifacts.admin";
     public static String DEFAULT_PERMISSION = "artifacts.default";
-    public static String MESSAGE_LINE;
     
     private static File ARTIFACTS_FILE;
     
@@ -58,16 +57,12 @@ public class ArtifactsPlugin extends JavaPlugin {
         ConfigurationSerialization.registerClass(Charger.class);
         Settings.load();
         
-        MESSAGE_LINE = ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + ChatColor.BOLD + "+--------+" +
-                ChatColor.RESET + " " + Settings.PREFIX +
-                ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + ChatColor.BOLD + "+--------+";
-        
         registerArtifacts();
         
         Bukkit.getPluginManager().registerEvents(new PowerArtifactsFlag(), this);
         Bukkit.getPluginManager().registerEvents(new ChargerListener(), this);
         
-        getCommand("artifacts").setExecutor(new ArtifactsCommandGroup(this));
+        getCommand("artifacts").setExecutor(new ArtifactsCommandGroup(this, "artifacts"));
         getCommand("setmodeldata").setExecutor(new SetModelDataCommand());
         
         
