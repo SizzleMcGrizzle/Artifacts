@@ -9,6 +9,5 @@ public class ArtifactsCommandGroup extends CommandHandler {
         super(plugin);
         
         registerSubCommand("changeModelData", new ArtifactsChangeModelDataCommand(plugin));
-        registerSubCommand("help", new ArtifactsHelpCommand(plugin, getCommands(), commandName));
     }
 }

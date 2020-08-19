@@ -1,5 +1,6 @@
 package me.sizzlemcgrizzle.artifacts.charger;
 
+import de.craftlancer.core.conversation.FormattedConversable;
 import me.sizzlemcgrizzle.artifacts.ArtifactsPlugin;
 import me.sizzlemcgrizzle.artifacts.settings.Settings;
 import me.sizzlemcgrizzle.blueprints.api.BlueprintPostPasteEvent;

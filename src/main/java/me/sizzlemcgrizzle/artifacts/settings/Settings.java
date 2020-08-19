@@ -8,7 +8,7 @@ import java.io.File;
 public class Settings {
     
     public static String PREFIX;
-    public static int WINDBLADE_FLIGHT_DURATION;
+    public static int MAX_MANA;
     
     private static File SETTINGS_FILE = new File(ArtifactsPlugin.instance.getDataFolder(), "settings.yml");
     
@@ -19,6 +19,6 @@ public class Settings {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(SETTINGS_FILE);
         
         PREFIX = config.getString("Prefix");
-        WINDBLADE_FLIGHT_DURATION = config.getInt("Windblade_Flight_Duration");
+        MAX_MANA = config.getInt("Max_Mana");
     }
 }

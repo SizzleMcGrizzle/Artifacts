@@ -34,6 +34,16 @@ public class ArtifactsChangeModelDataCommand extends SubCommand {
     }
     
     @Override
+    public String[] getArgs() {
+        return new String[]{"<artifact>", "<state>", "<modelData>"};
+    }
+    
+    @Override
+    public String getDescription() {
+        return "Sets the powered/unpowered model data for specified artifact to use.";
+    }
+    
+    @Override
     protected String execute(CommandSender sender, Command command, String s, String[] args) {
         
         if (!(sender instanceof Player))

@@ -1,14 +1,11 @@
 package me.sizzlemcgrizzle.artifacts.artifacts;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class Artifact implements Listener {
-    
-    private YamlConfiguration config;
     
     private String name;
     private Material type;
@@ -64,10 +61,6 @@ public abstract class Artifact implements Listener {
     }
     
     public void onRightClick(PlayerInteractEvent event) {
-    
-    }
-    
-    public void run() {
     
     }
 }

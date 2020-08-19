@@ -10,6 +10,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import de.craftlancer.core.LambdaRunnable;
 import me.sizzlemcgrizzle.artifacts.artifacts.Artifact;
 import me.sizzlemcgrizzle.artifacts.artifacts.MagneticMaul;
+import me.sizzlemcgrizzle.artifacts.artifacts.ManaRegistry;
 import me.sizzlemcgrizzle.artifacts.artifacts.ReapersScythe;
 import me.sizzlemcgrizzle.artifacts.artifacts.WindBlade;
 import me.sizzlemcgrizzle.artifacts.charger.Charger;
@@ -43,6 +44,7 @@ public class ArtifactsPlugin extends JavaPlugin {
     private List<Artifact> artifacts = new ArrayList<>();
     private List<Charger> chargers = new ArrayList<>();
     
+    private ManaRegistry manaRegistry;
     private RegionContainer container;
     
     @Override
@@ -69,6 +71,9 @@ public class ArtifactsPlugin extends JavaPlugin {
         chargers = Charger.registerChargers();
         
         this.container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        this.manaRegistry = new ManaRegistry();
+        
+        new LambdaRunnable(manaRegistry::run).runTaskTimer(this, 4, 4);
     }
     
     @Override
@@ -104,7 +109,6 @@ public class ArtifactsPlugin extends JavaPlugin {
         
         artifacts.forEach(artifact -> Bukkit.getPluginManager().registerEvents(artifact, this));
         
-        new LambdaRunnable(() -> artifacts.forEach(Artifact::run)).runTaskTimer(this, 4, 4);
     }
     
     private void saveArtifacts() {
@@ -172,5 +176,9 @@ public class ArtifactsPlugin extends JavaPlugin {
     
     public static String colorize(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+    
+    public ManaRegistry getManaRegistry() {
+        return manaRegistry;
     }
 }

@@ -1,5 +1,6 @@
 package me.sizzlemcgrizzle.artifacts.charger;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -18,9 +19,9 @@ public class ChargerPrompt extends FixedSetPrompt {
     public ChargerPrompt() {
         ComponentBuilder builder = new ComponentBuilder();
         
-        this.promptText = builder.append(" &a&l[Yes] ")
+        this.promptText = builder.append(ChatColor.BOLD + "" + ChatColor.GREEN + "&a&l[Yes] ")
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/convo yes"))
-                .append("&c&l[No] ")
+                .append(ChatColor.BOLD + "" + ChatColor.RED + "&c&l[No]")
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/convo no")).create();
     }
     
