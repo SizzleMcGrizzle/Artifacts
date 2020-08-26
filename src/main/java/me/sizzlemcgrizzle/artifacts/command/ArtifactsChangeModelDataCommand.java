@@ -18,7 +18,11 @@ import java.util.stream.Collectors;
 public class ArtifactsChangeModelDataCommand extends SubCommand {
     
     protected ArtifactsChangeModelDataCommand(Plugin plugin) {
-        super(ArtifactsPlugin.ADMIN_PERMISSION, plugin, false);
+        super(ArtifactsPlugin.ADMIN_PERMISSION,
+                plugin,
+                false,
+                "Sets the powered/unpowered model data for specified artifact to use.",
+                "<artifact>", "<state>", "<modelData>");
     }
     
     @Override
@@ -31,16 +35,6 @@ public class ArtifactsChangeModelDataCommand extends SubCommand {
             return Collections.singletonList("#");
         
         return Collections.emptyList();
-    }
-    
-    @Override
-    public String[] getArgs() {
-        return new String[]{"<artifact>", "<state>", "<modelData>"};
-    }
-    
-    @Override
-    public String getDescription() {
-        return "Sets the powered/unpowered model data for specified artifact to use.";
     }
     
     @Override

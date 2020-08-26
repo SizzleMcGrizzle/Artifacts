@@ -21,8 +21,8 @@ public class ReapersScythe extends Artifact {
     
     private Map<Player, Double> playerDamageMap = new HashMap<>();
     
-    public ReapersScythe(String name, Material type, int customModelDataInt, int customModelDataPoweredInt) {
-        super(name, type, customModelDataInt, customModelDataPoweredInt);
+    public ReapersScythe(String name, Material type, int normalModelData, int poweredModelData, ManaRegistry registry) {
+        super(name, type, normalModelData, poweredModelData, registry);
     }
     
     @EventHandler(ignoreCancelled = true)
@@ -43,11 +43,6 @@ public class ReapersScythe extends Artifact {
         if (cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK)
             return;
         
-        if (!ArtifactsPlugin.instance.getManaRegistry().hasMana(damager.getUniqueId())) {
-            ArtifactsPlugin.tell(damager, Settings.PREFIX + "&eYou are out of energy! Walk into a charger to regain energy!");
-            return;
-        }
-        
         playerDamageMap.put(damager, event.getFinalDamage());
         
         List<Player> inRangePlayers = Bukkit.getOnlinePlayers().stream().filter(player -> player != damager && player != victim && !player.isDead() && player.getLocation().distanceSquared(victim.getLocation()) <= 9).collect(Collectors.toList());
@@ -55,7 +50,10 @@ public class ReapersScythe extends Artifact {
         if (inRangePlayers.size() == 0)
             return;
         
-        ArtifactsPlugin.instance.getManaRegistry().take(damager.getUniqueId(), 2 / inRangePlayers.size() * 200);
+        if (!getManaRegistry().take(damager.getUniqueId(), 2 / inRangePlayers.size() * Settings.REAPERS_SCYTHE_MANA_PER_USE)) {
+            ArtifactsPlugin.tell(damager, Settings.PREFIX + "&eYou are out of energy! Walk into a charger to regain energy!");
+            return;
+        }
         
         for (Player player : inRangePlayers) {
             player.damage(playerDamageMap.get(damager));

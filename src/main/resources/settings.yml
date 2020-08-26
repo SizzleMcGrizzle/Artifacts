@@ -1,2 +1,6 @@
 Prefix: "&8[&5Artifacts&8] "
-Max_Mana: 4000
+Max_Mana: 5000
+Wind_Blade_Mana_Per_Use: 500
+Reapers_Scythe_Mana_Per_Use: 200
+Magnetic_Maul_Mana_Per_Use: 100
+Meridian_Scepter_Mana_Per_Use: 1000

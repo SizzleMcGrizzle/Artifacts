@@ -13,8 +13,8 @@ import org.bukkit.util.Vector;
 
 public class WindBlade extends Artifact {
     
-    public WindBlade(String name, Material type, int normalDataNumber, int poweredDataNumber) {
-        super(name, type, normalDataNumber, poweredDataNumber);
+    public WindBlade(String name, Material type, int normalDataNumber, int poweredDataNumber, ManaRegistry registry) {
+        super(name, type, normalDataNumber, poweredDataNumber, registry);
     }
     
     @Override
@@ -22,7 +22,7 @@ public class WindBlade extends Artifact {
         Player player = event.getPlayer();
         
         
-        if (!ArtifactsPlugin.instance.getManaRegistry().hasMana(player.getUniqueId())) {
+        if (!getManaRegistry().take(player.getUniqueId(), 500)) {
             ArtifactsPlugin.tell(player, Settings.PREFIX + "&eYou are out of energy! Walk into a charger to regain energy!");
             return;
         }
@@ -53,8 +53,6 @@ public class WindBlade extends Artifact {
         }.runTaskTimer(ArtifactsPlugin.instance, 0, 1);
         
         player.setVelocity(vec);
-        
-        ArtifactsPlugin.instance.getManaRegistry().take(player.getUniqueId(), 500);
     }
     
 }

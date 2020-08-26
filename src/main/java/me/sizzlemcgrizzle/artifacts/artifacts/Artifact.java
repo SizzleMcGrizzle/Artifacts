@@ -11,12 +11,14 @@ public abstract class Artifact implements Listener {
     private Material type;
     private int normalDataNumber;
     private int poweredDataNumber;
+    private ManaRegistry manaRegistry;
     
-    public Artifact(String name, Material type, int normalDataNumber, int poweredDataNumber) {
+    public Artifact(String name, Material type, int normalDataNumber, int poweredDataNumber, ManaRegistry registry) {
         this.name = name;
         this.type = type;
         this.normalDataNumber = normalDataNumber;
         this.poweredDataNumber = poweredDataNumber;
+        this.manaRegistry = registry;
     }
     
     //Is an item the powered version of the artifact?
@@ -54,6 +56,10 @@ public abstract class Artifact implements Listener {
     
     public void setType(Material type) {
         this.type = type;
+    }
+    
+    public ManaRegistry getManaRegistry() {
+        return manaRegistry;
     }
     
     public void onLeftClick(PlayerInteractEvent event) {

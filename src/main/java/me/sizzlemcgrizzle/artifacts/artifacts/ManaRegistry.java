@@ -39,18 +39,20 @@ public class ManaRegistry {
                 }));
     }
     
-    public void take(UUID uuid, long mana) {
+    /**
+     * @return true if successful, false if player doesn't have enough mana
+     */
+    public boolean take(UUID uuid, long mana) {
+        if (playerManaMap.containsKey(uuid) && playerManaMap.get(uuid) < mana)
+            return false;
         playerManaMap.put(uuid, playerManaMap.containsKey(uuid) ? Long.max(0, playerManaMap.get(uuid) - mana) : Settings.MAX_MANA - mana);
         displayActionBar(Bukkit.getPlayer(uuid));
+        return true;
     }
     
     public void add(UUID uuid, long mana) {
         playerManaMap.put(uuid, playerManaMap.containsKey(uuid) ? Long.min(Settings.MAX_MANA, playerManaMap.get(uuid) + mana) : Settings.MAX_MANA);
         displayActionBar(Bukkit.getPlayer(uuid));
-    }
-    
-    public boolean hasMana(UUID uuid) {
-        return !playerManaMap.containsKey(uuid) || playerManaMap.get(uuid) > 0;
     }
     
     private void displayActionBar(Player player) {

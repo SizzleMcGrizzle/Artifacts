@@ -15,18 +15,13 @@ import java.util.stream.Collectors;
 
 public class MagneticMaul extends Artifact {
     
-    public MagneticMaul(String name, Material type, int customModelDataInt, int customModelDataPoweredInt) {
-        super(name, type, customModelDataInt, customModelDataPoweredInt);
+    public MagneticMaul(String name, Material type, int normalDataNumber, int poweredDataNumber, ManaRegistry registry) {
+        super(name, type, normalDataNumber, poweredDataNumber, registry);
     }
     
     @Override
     public void onRightClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        
-        if (!ArtifactsPlugin.instance.getManaRegistry().hasMana(player.getUniqueId())) {
-            ArtifactsPlugin.tell(player, Settings.PREFIX + "&eYou are out of energy! Walk into a charger to regain energy!");
-            return;
-        }
         
         List<Player> inRangePlayers = Bukkit.getOnlinePlayers().stream().filter(p ->
                 p != player
@@ -37,7 +32,11 @@ public class MagneticMaul extends Artifact {
         if (inRangePlayers.size() == 0)
             return;
         
-        ArtifactsPlugin.instance.getManaRegistry().take(player.getUniqueId(), inRangePlayers.size() * 100);
+        if (!getManaRegistry().take(player.getUniqueId(), inRangePlayers.size() * Settings.MAGNETIC_MAUL_MANA_PER_USE)) {
+            ArtifactsPlugin.tell(player, Settings.PREFIX + "&eYou are out of energy! Walk into a charger to regain energy!");
+            return;
+        }
+        
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BAT_LOOP, 0.1F, 2F);
         
         for (Player p : inRangePlayers) {

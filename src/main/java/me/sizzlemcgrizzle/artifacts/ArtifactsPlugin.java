@@ -1,5 +1,7 @@
 package me.sizzlemcgrizzle.artifacts;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
@@ -11,6 +13,7 @@ import de.craftlancer.core.LambdaRunnable;
 import me.sizzlemcgrizzle.artifacts.artifacts.Artifact;
 import me.sizzlemcgrizzle.artifacts.artifacts.MagneticMaul;
 import me.sizzlemcgrizzle.artifacts.artifacts.ManaRegistry;
+import me.sizzlemcgrizzle.artifacts.artifacts.MeridianScepter;
 import me.sizzlemcgrizzle.artifacts.artifacts.ReapersScythe;
 import me.sizzlemcgrizzle.artifacts.artifacts.WindBlade;
 import me.sizzlemcgrizzle.artifacts.charger.Charger;
@@ -46,10 +49,12 @@ public class ArtifactsPlugin extends JavaPlugin {
     
     private ManaRegistry manaRegistry;
     private RegionContainer container;
+    private ProtocolManager protocolManager;
     
     @Override
     public void onLoad() {
         PowerArtifactsFlag.registerFlag();
+        protocolManager = ProtocolLibrary.getProtocolManager();
     }
     
     @Override
@@ -64,7 +69,7 @@ public class ArtifactsPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PowerArtifactsFlag(), this);
         Bukkit.getPluginManager().registerEvents(new ChargerListener(), this);
         
-        getCommand("artifacts").setExecutor(new ArtifactsCommandGroup(this, "artifacts"));
+        getCommand("artifacts").setExecutor(new ArtifactsCommandGroup(this));
         getCommand("setmodeldata").setExecutor(new SetModelDataCommand());
         
         
@@ -91,21 +96,26 @@ public class ArtifactsPlugin extends JavaPlugin {
         ConfigurationSection windBladeSection = config.getConfigurationSection("windblade");
         ConfigurationSection reapersScytheSection = config.getConfigurationSection("reapersscythe");
         ConfigurationSection magneticMaulSection = config.getConfigurationSection("magneticmaul");
+        ConfigurationSection meridianScepterSection = config.getConfigurationSection("meridianscepter");
         
         artifacts.add(new WindBlade(windBladeSection.getName(),
                 Material.valueOf(windBladeSection.getString("type")),
                 windBladeSection.getInt("normalDataNumber"),
-                windBladeSection.getInt("poweredDataNumber")));
+                windBladeSection.getInt("poweredDataNumber"), manaRegistry));
         
         artifacts.add(new ReapersScythe(reapersScytheSection.getName(),
                 Material.valueOf(reapersScytheSection.getString("type")),
                 reapersScytheSection.getInt("normalDataNumber"),
-                reapersScytheSection.getInt("poweredDataNumber")));
+                reapersScytheSection.getInt("poweredDataNumber"), manaRegistry));
         
         artifacts.add(new MagneticMaul(magneticMaulSection.getName(),
                 Material.valueOf(magneticMaulSection.getString("type")),
                 magneticMaulSection.getInt("normalDataNumber"),
-                magneticMaulSection.getInt("poweredDataNumber")));
+                magneticMaulSection.getInt("poweredDataNumber"), manaRegistry));
+        artifacts.add(new MeridianScepter(meridianScepterSection.getName(),
+                Material.valueOf(meridianScepterSection.getString("type")),
+                meridianScepterSection.getInt("normalDataNumber"),
+                meridianScepterSection.getInt("poweredDataNumber"), manaRegistry));
         
         artifacts.forEach(artifact -> Bukkit.getPluginManager().registerEvents(artifact, this));
         
@@ -151,6 +161,10 @@ public class ArtifactsPlugin extends JavaPlugin {
             }
         }
         return bool;
+    }
+    
+    public ProtocolManager getProtocolManager() {
+        return protocolManager;
     }
     
     public List<Artifact> getArtifacts() {

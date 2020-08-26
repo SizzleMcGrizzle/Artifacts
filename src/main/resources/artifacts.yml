@@ -10,3 +10,7 @@ magneticmaul:
   type: DIAMOND_SWORD
   normalDataNumber: 4
   poweredDataNumber: 5
+meridianscepter:
+  type: DIAMOND_SWORD
+  normalDataNumber: 6
+  poweredDataNumber: 7
