@@ -3,7 +3,7 @@ main: me.sizzlemcgrizzle.artifacts.ArtifactsPlugin
 api-version: 1.14
 author: sizzlemcgrizzle
 version: ${project.version}
-depend: [WorldGuard, Blueprints]
+depend: [WorldGuard, Blueprints, CLCore, ProtocolLib]
 permissions:
   artifacts.admin:
     description: admin permission
