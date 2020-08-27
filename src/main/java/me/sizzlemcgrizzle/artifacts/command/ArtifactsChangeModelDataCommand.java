@@ -17,12 +17,19 @@ import java.util.stream.Collectors;
 
 public class ArtifactsChangeModelDataCommand extends SubCommand {
     
+    /*
     protected ArtifactsChangeModelDataCommand(Plugin plugin) {
         super(ArtifactsPlugin.ADMIN_PERMISSION,
                 plugin,
                 false,
                 "Sets the powered/unpowered model data for specified artifact to use.",
                 "<artifact>", "<state>", "<modelData>");
+    }
+     */
+    protected ArtifactsChangeModelDataCommand(Plugin plugin) {
+        super(ArtifactsPlugin.ADMIN_PERMISSION,
+                plugin,
+                false);
     }
     
     @Override
