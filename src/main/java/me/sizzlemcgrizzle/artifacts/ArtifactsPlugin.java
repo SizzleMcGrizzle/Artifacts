@@ -64,6 +64,8 @@ public class ArtifactsPlugin extends JavaPlugin {
         ConfigurationSerialization.registerClass(Charger.class);
         Settings.load();
         
+        this.manaRegistry = new ManaRegistry();
+        
         registerArtifacts();
         
         Bukkit.getPluginManager().registerEvents(new PowerArtifactsFlag(), this);
@@ -76,7 +78,6 @@ public class ArtifactsPlugin extends JavaPlugin {
         chargers = Charger.registerChargers();
         
         this.container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        this.manaRegistry = new ManaRegistry();
         
         new LambdaRunnable(manaRegistry::run).runTaskTimer(this, 4, 4);
     }
