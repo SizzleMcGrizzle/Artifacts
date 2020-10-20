@@ -14,5 +14,3 @@ permissions:
 commands:
   artifacts:
     description: Main plugin command group
-  setmodeldata:
-    description: Changes the custom model data of held item

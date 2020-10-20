@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class MeridianScepter extends Artifact {
     
+    private static final Particle.DustOptions PARTICLE = new Particle.DustOptions(Color.BLACK, 2);
     private Map<Arrow, BukkitTask> arrowMap = new HashMap<>();
     
     public MeridianScepter(String name, Material type, int normalDataNumber, int poweredDataNumber, ManaRegistry registry) {
@@ -55,7 +56,7 @@ public class MeridianScepter extends Artifact {
         arrowPacketContainer.getIntegerArrays().write(0, new int[]{arrow.getEntityId()});
         Bukkit.getOnlinePlayers().forEach(p -> {
             try {
-                ArtifactsPlugin.instance.getProtocolManager().sendServerPacket(p, arrowPacketContainer);
+                ArtifactsPlugin.getInstance().getProtocolManager().sendServerPacket(p, arrowPacketContainer);
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -65,7 +66,6 @@ public class MeridianScepter extends Artifact {
         
         arrowMap.put(arrow, new BukkitRunnable() {
             
-            private final Particle.DustOptions particle = new Particle.DustOptions(Color.BLACK, 2);
             private int tickID = 0;
             private Location location;
             
@@ -92,9 +92,9 @@ public class MeridianScepter extends Artifact {
                 
                 Vector v = vector.subtract(arrow.getLocation().toVector());
                 arrow.setVelocity(v.normalize().multiply(0.25));
-                arrow.getWorld().spawnParticle(Particle.REDSTONE, arrow.getLocation(), 1, particle);
+                arrow.getWorld().spawnParticle(Particle.REDSTONE, arrow.getLocation(), 1, PARTICLE);
             }
-        }.runTaskTimer(ArtifactsPlugin.instance, 0, 1));
+        }.runTaskTimer(ArtifactsPlugin.getInstance(), 0, 1));
         
     }
     

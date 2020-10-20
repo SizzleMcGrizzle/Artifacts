@@ -19,7 +19,6 @@ import me.sizzlemcgrizzle.artifacts.artifacts.WindBlade;
 import me.sizzlemcgrizzle.artifacts.charger.Charger;
 import me.sizzlemcgrizzle.artifacts.charger.ChargerListener;
 import me.sizzlemcgrizzle.artifacts.command.ArtifactsCommandGroup;
-import me.sizzlemcgrizzle.artifacts.command.SetModelDataCommand;
 import me.sizzlemcgrizzle.artifacts.settings.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -72,7 +71,6 @@ public class ArtifactsPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChargerListener(), this);
         
         getCommand("artifacts").setExecutor(new ArtifactsCommandGroup(this));
-        getCommand("setmodeldata").setExecutor(new SetModelDataCommand());
         
         
         chargers = Charger.registerChargers();
@@ -149,19 +147,29 @@ public class ArtifactsPlugin extends JavaPlugin {
     }
     
     
-    public boolean isPoweredArtifactRegion(Location location) {
+    public PowerArtifactsFlag.PoweredType getPoweredTypeInRegion(Location location) {
+        PowerArtifactsFlag.PoweredType type = null;
+        
         RegionManager manager = container.get(BukkitAdapter.adapt(location.getWorld()));
         manager.getApplicableRegions(BlockVector3.at(location.getX(), location.getY(), location.getZ()));
         
-        boolean bool = false;
         for (ProtectedRegion region : manager.getApplicableRegions(BlockVector3.at(location.getX(), location.getY(), location.getZ()))) {
-            StateFlag.State state = region.getFlag(PowerArtifactsFlag.POWER_ARTIFACTS_FLAG);
+            StateFlag.State state = region.getFlag(PowerArtifactsFlag.CAPTURE_POWER_ARTIFACTS_FLAG);
             if (state == StateFlag.State.ALLOW) {
-                bool = true;
+                type = PowerArtifactsFlag.PoweredType.CAPTURE;
                 break;
             }
         }
-        return bool;
+        if (type == null)
+            for (ProtectedRegion region : manager.getApplicableRegions(BlockVector3.at(location.getX(), location.getY(), location.getZ()))) {
+                StateFlag.State state = region.getFlag(PowerArtifactsFlag.DUNGEON_POWER_ARTIFACTS_FLAG);
+                if (state == StateFlag.State.ALLOW) {
+                    type = PowerArtifactsFlag.PoweredType.DUNGEON;
+                    break;
+                }
+            }
+        
+        return type;
     }
     
     public ProtocolManager getProtocolManager() {
@@ -195,5 +203,9 @@ public class ArtifactsPlugin extends JavaPlugin {
     
     public ManaRegistry getManaRegistry() {
         return manaRegistry;
+    }
+    
+    public static ArtifactsPlugin getInstance() {
+        return instance;
     }
 }

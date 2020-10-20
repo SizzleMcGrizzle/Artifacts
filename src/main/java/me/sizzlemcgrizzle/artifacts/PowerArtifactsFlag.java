@@ -5,6 +5,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import de.craftlancer.clcapture.CLCapture;
 import de.craftlancer.clcapture.CapturePoint;
 import de.craftlancer.clcapture.CapturePointType;
+import de.craftlancer.core.util.ItemBuilder;
 import me.sizzlemcgrizzle.artifacts.artifacts.Artifact;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,17 +16,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Optional;
 
 public class PowerArtifactsFlag implements Listener {
     
-    static final StateFlag POWER_ARTIFACTS_FLAG = new StateFlag("power-artifacts", false);
+    static final StateFlag CAPTURE_POWER_ARTIFACTS_FLAG = new StateFlag("power-artifacts", false);
+    static final StateFlag DUNGEON_POWER_ARTIFACTS_FLAG = new StateFlag("power-dungeon-artifacts", false);
     private final CLCapture clCapture = (CLCapture) Bukkit.getPluginManager().getPlugin("CLCapture");
     
     static void registerFlag() {
-        WorldGuard.getInstance().getFlagRegistry().register(POWER_ARTIFACTS_FLAG);
+        WorldGuard.getInstance().getFlagRegistry().register(CAPTURE_POWER_ARTIFACTS_FLAG);
+        WorldGuard.getInstance().getFlagRegistry().register(DUNGEON_POWER_ARTIFACTS_FLAG);
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
@@ -36,22 +38,20 @@ public class PowerArtifactsFlag implements Listener {
         if (mainHand == null || mainHand.getType() == Material.AIR || !mainHand.hasItemMeta() || !mainHand.getItemMeta().hasCustomModelData())
             return;
         
-        if (ArtifactsPlugin.instance.getArtifacts().stream().noneMatch(artifact -> artifact.getType() == mainHand.getType()))
-            return;
-        
         int mainHandModelData = mainHand.getItemMeta().getCustomModelData();
         int modelData;
         
-        Optional<Artifact> optional = ArtifactsPlugin.instance.getArtifacts().stream()
+        Optional<Artifact> optional = ArtifactsPlugin.getInstance().getArtifacts().stream()
                 .filter(a -> a.getType() == mainHand.getType() && (a.getNormalDataNumber() == mainHandModelData || a.getPoweredDataNumber() == mainHandModelData)).findFirst();
         
         if (!optional.isPresent())
             return;
         
         Artifact artifact = optional.get();
+        PoweredType type = ArtifactsPlugin.getInstance().getPoweredTypeInRegion(player.getLocation());
         
-        if (ArtifactsPlugin.instance.isPoweredArtifactRegion(player.getLocation())) {
-            if (isPoweredPointActive()) {
+        if (type != null) {
+            if (isTypeActive(type)) {
                 if (mainHandModelData == artifact.getNormalDataNumber())
                     modelData = artifact.getPoweredDataNumber();
                 else {
@@ -65,24 +65,29 @@ public class PowerArtifactsFlag implements Listener {
                 modelData = artifact.getNormalDataNumber();
             else
                 return;
-        } else if (!ArtifactsPlugin.instance.isPoweredArtifactRegion(player.getLocation()) && mainHandModelData == artifact.getPoweredDataNumber())
+        } else if (mainHandModelData == artifact.getPoweredDataNumber())
             modelData = artifact.getNormalDataNumber();
         else
             return;
         
-        ItemMeta meta = mainHand.getItemMeta();
-        meta.setCustomModelData(modelData);
-        mainHand.setItemMeta(meta);
-        player.getInventory().setItemInMainHand(mainHand);
+        player.getInventory().setItemInMainHand(new ItemBuilder(mainHand).setCustomModelData(modelData).build());
         player.updateInventory();
     }
     
-    private boolean isPoweredPointActive() {
+    private boolean isTypeActive(PoweredType type) {
+        if (type == PoweredType.DUNGEON)
+            return true;
+        
         if (clCapture == null)
             return false;
         
         return clCapture.getPoints().stream().anyMatch(point -> (point.getState() == CapturePoint.CapturePointState.ACTIVE
                 || point.getState() == CapturePoint.CapturePointState.CAPTURED)
                 && point.getArtifactModifier() == CapturePointType.ArtifactModifer.POWERED);
+    }
+    
+    public enum PoweredType {
+        CAPTURE,
+        DUNGEON
     }
 }

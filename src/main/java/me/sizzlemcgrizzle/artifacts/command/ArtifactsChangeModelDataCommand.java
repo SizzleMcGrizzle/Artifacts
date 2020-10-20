@@ -7,7 +7,6 @@ import me.sizzlemcgrizzle.artifacts.artifacts.Artifact;
 import me.sizzlemcgrizzle.artifacts.settings.Settings;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -17,15 +16,6 @@ import java.util.stream.Collectors;
 
 public class ArtifactsChangeModelDataCommand extends SubCommand {
     
-    /*
-    protected ArtifactsChangeModelDataCommand(Plugin plugin) {
-        super(ArtifactsPlugin.ADMIN_PERMISSION,
-                plugin,
-                false,
-                "Sets the powered/unpowered model data for specified artifact to use.",
-                "<artifact>", "<state>", "<modelData>");
-    }
-     */
     protected ArtifactsChangeModelDataCommand(Plugin plugin) {
         super(ArtifactsPlugin.ADMIN_PERMISSION,
                 plugin,
@@ -35,7 +25,7 @@ public class ArtifactsChangeModelDataCommand extends SubCommand {
     @Override
     protected List<String> onTabComplete(CommandSender sender, String[] args) {
         if (args.length == 2)
-            return Utils.getMatches(args[1], ArtifactsPlugin.instance.getArtifacts().stream().map(Artifact::getName).collect(Collectors.toList()));
+            return Utils.getMatches(args[1], ArtifactsPlugin.getInstance().getArtifacts().stream().map(Artifact::getName).collect(Collectors.toList()));
         if (args.length == 3)
             return Utils.getMatches(args[2], Arrays.asList("POWERED", "UNPOWERED"));
         if (args.length == 4)
@@ -47,8 +37,8 @@ public class ArtifactsChangeModelDataCommand extends SubCommand {
     @Override
     protected String execute(CommandSender sender, Command command, String s, String[] args) {
         
-        if (!(sender instanceof Player))
-            return null;
+        if (!checkSender(sender))
+            return Settings.PREFIX + "§cYou do not have access to use this command.";
         
         if (args.length < 2)
             return ArtifactsPlugin.colorize(Settings.PREFIX + "&cPlease enter an artifact type.");
@@ -57,11 +47,11 @@ public class ArtifactsChangeModelDataCommand extends SubCommand {
         if (args.length < 4)
             return ArtifactsPlugin.colorize(Settings.PREFIX + "&cPlease enter a model data number.");
         
-        if (ArtifactsPlugin.instance.getArtifacts().stream().noneMatch(artifact -> artifact.getName().equalsIgnoreCase(args[1])))
+        if (ArtifactsPlugin.getInstance().getArtifacts().stream().noneMatch(artifact -> artifact.getName().equalsIgnoreCase(args[1])))
             return ArtifactsPlugin.colorize(Settings.PREFIX + "&cPlease enter a valid artifact type!");
         
         try {
-            Artifact artifact = ArtifactsPlugin.instance.getArtifacts().stream().filter(a -> a.getName().equalsIgnoreCase(args[1])).findFirst().get();
+            Artifact artifact = ArtifactsPlugin.getInstance().getArtifacts().stream().filter(a -> a.getName().equalsIgnoreCase(args[1])).findFirst().get();
             int data = Integer.parseInt(args[3]);
             
             if (args[2].equalsIgnoreCase("powered"))

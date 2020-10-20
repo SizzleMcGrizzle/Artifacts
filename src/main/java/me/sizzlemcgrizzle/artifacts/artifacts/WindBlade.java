@@ -50,7 +50,7 @@ public class WindBlade extends Artifact {
                 player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 5, particle);
                 counter++;
             }
-        }.runTaskTimer(ArtifactsPlugin.instance, 0, 1);
+        }.runTaskTimer(ArtifactsPlugin.getInstance(), 0, 1);
         
         player.setVelocity(vec);
     }

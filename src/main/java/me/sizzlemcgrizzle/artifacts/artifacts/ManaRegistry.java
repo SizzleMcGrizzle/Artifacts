@@ -24,7 +24,7 @@ public class ManaRegistry {
     
     public void run() {
         tickID += 4;
-        ArtifactsPlugin.instance.getChargers().stream().filter(Charger::isLoaded).forEach(charger -> Bukkit.getOnlinePlayers().stream()
+        ArtifactsPlugin.getInstance().getChargers().stream().filter(Charger::isLoaded).forEach(charger -> Bukkit.getOnlinePlayers().stream()
                 .filter(p -> playerManaMap.containsKey(p.getUniqueId()) && playerManaMap.get(p.getUniqueId()) != Settings.MAX_MANA && charger.containsLocation(p.getLocation()))
                 .forEach(p -> {
                     World world = charger.getBaseLocation().getWorld();

@@ -31,13 +31,13 @@ public class ConfirmationPrompt extends ChargerPrompt {
         if (ArrayUtils.contains(yes, input.toLowerCase())) {
             
             ArtifactsPlugin.tell(player, Settings.PREFIX + "&eCharger has been removed.");
-            ArtifactsPlugin.instance.removeCharger(charger);
+            ArtifactsPlugin.getInstance().removeCharger(charger);
             charger = null;
             
         } else if (ArrayUtils.contains(no, input.toLowerCase())) {
             
             ArtifactsPlugin.tell(player, Settings.PREFIX + "&eCharger removal has been cancelled.");
-            ArtifactsPlugin.instance.removeCharger(charger);
+            ArtifactsPlugin.getInstance().removeCharger(charger);
             charger = null;
             
         }

@@ -71,11 +71,11 @@ public class Charger implements ConfigurationSerializable {
     }
     
     public static List<Charger> registerChargers() {
-        File chargersFile = new File(ArtifactsPlugin.instance.getDataFolder(), "chargers.yml");
+        File chargersFile = new File(ArtifactsPlugin.getInstance().getDataFolder(), "chargers.yml");
         YamlConfiguration config;
         
         if (!chargersFile.exists())
-            ArtifactsPlugin.instance.saveResource(chargersFile.getName(), true);
+            ArtifactsPlugin.getInstance().saveResource(chargersFile.getName(), true);
         
         config = YamlConfiguration.loadConfiguration(chargersFile);
         
@@ -84,11 +84,11 @@ public class Charger implements ConfigurationSerializable {
     }
     
     public static void saveChargers(List<Charger> chargers) {
-        File chargersFile = new File(ArtifactsPlugin.instance.getDataFolder(), "chargers.yml");
+        File chargersFile = new File(ArtifactsPlugin.getInstance().getDataFolder(), "chargers.yml");
         YamlConfiguration config;
         
         if (!chargersFile.exists())
-            ArtifactsPlugin.instance.saveResource(chargersFile.getName(), true);
+            ArtifactsPlugin.getInstance().saveResource(chargersFile.getName(), true);
         
         config = YamlConfiguration.loadConfiguration(chargersFile);
         

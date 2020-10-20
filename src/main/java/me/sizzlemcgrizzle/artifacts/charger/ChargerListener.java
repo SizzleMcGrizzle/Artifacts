@@ -19,10 +19,11 @@ public class ChargerListener implements Listener {
         if (!event.getType().equalsIgnoreCase("charger"))
             return;
         
-        if (ArtifactsPlugin.instance.getChargers().stream().anyMatch(charger -> charger.getBaseLocation().equals(event.getFeatureLocation())))
+        if (ArtifactsPlugin.getInstance().getChargers().stream().anyMatch(charger -> charger.getBaseLocation().equals(event.getFeatureLocation())))
             return;
         
-        ArtifactsPlugin.instance.addCharger(new Charger(event.getFeatureLocation(), event.getBlocksPasted()));
+        ArtifactsPlugin.getInstance().addCharger(new Charger(event.getFeatureLocation(), event.getBlocksPasted()));
+        System.out.println("ewew");
     }
     
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
@@ -30,13 +31,13 @@ public class ChargerListener implements Listener {
         if (!event.getPlayer().hasPermission("artifacts.charger"))
             return;
         
-        if (ArtifactsPlugin.instance.getChargers().stream().anyMatch(charger -> charger.getStructure().contains(event.getBlock().getLocation()))) {
+        if (ArtifactsPlugin.getInstance().getChargers().stream().anyMatch(charger -> charger.getStructure().contains(event.getBlock().getLocation()))) {
             event.setCancelled(true);
             
-            Charger charger = ArtifactsPlugin.instance.getChargers().stream()
+            Charger charger = ArtifactsPlugin.getInstance().getChargers().stream()
                     .filter(c -> c.getStructure().contains(event.getBlock().getLocation())).findFirst().get();
             
-            ConversationFactory conversation = new ConversationFactory(ArtifactsPlugin.instance)
+            ConversationFactory conversation = new ConversationFactory(ArtifactsPlugin.getInstance())
                     .withLocalEcho(false)
                     .withModality(false)
                     .withTimeout(60)
