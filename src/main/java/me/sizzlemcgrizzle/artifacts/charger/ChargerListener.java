@@ -23,7 +23,6 @@ public class ChargerListener implements Listener {
             return;
         
         ArtifactsPlugin.getInstance().addCharger(new Charger(event.getFeatureLocation(), event.getBlocksPasted()));
-        System.out.println("ewew");
     }
     
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)

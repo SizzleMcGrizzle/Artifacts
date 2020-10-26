@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class ManaRegistry {
     
-    private Map<UUID, Long> playerManaMap = new HashMap<>();
+    private Map<UUID, Double> playerManaMap = new HashMap<>();
     private long tickID = 0;
     
     public void run() {
@@ -42,23 +42,23 @@ public class ManaRegistry {
     /**
      * @return true if successful, false if player doesn't have enough mana
      */
-    public boolean take(UUID uuid, long mana) {
+    public boolean take(UUID uuid, double mana) {
         if (playerManaMap.containsKey(uuid) && playerManaMap.get(uuid) < mana)
             return false;
-        playerManaMap.put(uuid, playerManaMap.containsKey(uuid) ? Long.max(0, playerManaMap.get(uuid) - mana) : Settings.MAX_MANA - mana);
+        playerManaMap.put(uuid, playerManaMap.containsKey(uuid) ? Double.max(0, playerManaMap.get(uuid) - mana) : Settings.MAX_MANA - mana);
         displayActionBar(Bukkit.getPlayer(uuid));
         return true;
     }
     
-    public void add(UUID uuid, long mana) {
-        playerManaMap.put(uuid, playerManaMap.containsKey(uuid) ? Long.min(Settings.MAX_MANA, playerManaMap.get(uuid) + mana) : Settings.MAX_MANA);
+    public void add(UUID uuid, double mana) {
+        playerManaMap.put(uuid, playerManaMap.containsKey(uuid) ? Double.min(Settings.MAX_MANA, playerManaMap.get(uuid) + mana) : Settings.MAX_MANA);
         displayActionBar(Bukkit.getPlayer(uuid));
     }
     
     private void displayActionBar(Player player) {
-        double progress = (double) playerManaMap.get(player.getUniqueId()) / Settings.MAX_MANA;
+        double progress = playerManaMap.get(player.getUniqueId()) / Settings.MAX_MANA;
         
-        ComponentBuilder progressBar = new ComponentBuilder();
+        ComponentBuilder progressBar = new ComponentBuilder("[ ").color(ChatColor.DARK_GRAY).bold(true);
         
         for (int i = 0; i < 24; ++i) {
             progressBar.append("▌");
@@ -69,8 +69,12 @@ public class ManaRegistry {
                 progressBar.color(ChatColor.GREEN);
             
             if (i == 11)
-                progressBar.append(ChatColor.BOLD + " [" + Math.round((progress * 100)) + "%] ").color(ChatColor.DARK_PURPLE);
+                progressBar.append(ChatColor.BOLD + " [").color(ChatColor.DARK_GRAY)
+                        .append(Math.round((progress * 100)) + "%").color(ChatColor.DARK_PURPLE).bold(true)
+                        .append("] ").color(ChatColor.DARK_GRAY);
         }
+        
+        progressBar.append(" ]").color(ChatColor.DARK_GRAY).bold(true);
         
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(progressBar.create()));
     }

@@ -43,7 +43,7 @@ public class MeridianScepter extends Artifact {
             return;
         }
         
-        RayTraceResult result = player.getWorld().rayTrace(player.getLocation(), player.getLocation().getDirection(),
+        RayTraceResult result = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(),
                 30,
                 FluidCollisionMode.NEVER,
                 true,
@@ -82,7 +82,7 @@ public class MeridianScepter extends Artifact {
                 if (tickID == 1 || tickID % 10 == 0)
                     arrow.getWorld().playSound(arrow.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.2F, 1F);
                 if (location == null)
-                    location = player.getLocation().clone();
+                    location = player.getLocation().clone().add(0, -0.5, 0);
                 
                 Vector vector;
                 if (result == null || result.getHitEntity() == null) {

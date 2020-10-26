@@ -22,7 +22,7 @@ public class WindBlade extends Artifact {
         Player player = event.getPlayer();
         
         
-        if (!getManaRegistry().take(player.getUniqueId(), 500)) {
+        if (!getManaRegistry().take(player.getUniqueId(), Settings.WIND_BLADE_MANA_PER_USE)) {
             ArtifactsPlugin.tell(player, Settings.PREFIX + "&eYou are out of energy! Walk into a charger to regain energy!");
             return;
         }
